@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor Dashboard - Dr. Dharshini</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="light-mode">
+  <!-- Join Screen (Initial) -->
+  <div class="join-screen" id="joinScreen">
+    <div class="join-card">
+      <div class="join-header">
+        <i class="fas fa-user-doctor"></i>
+        <h1>Doctor Dashboard</h1>
+        <p>Welcome, Dr. Dharshini</p>
+      </div>
+      <div class="join-form">
+        <div class="form-group">
+          <label><i class="fas fa-id-card"></i> Patient ID</label>
+          <input type="text" id="patientIdInput" placeholder="Enter Patient ID (e.g., P001)" />
+        </div>
+        <button class="btn-primary" id="joinBtn">
+          <i class="fas fa-arrow-right"></i> Start Chat
+        </button>
+        <button class="btn-secondary" id="demoBtn">
+          <i class="fas fa-magic"></i> Create Demo Patient
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div class="dashboard" id="dashboard" style="display: none;">
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav">
+      <div class="nav-left">
+        <button class="icon-btn hamburger-btn" id="hamburgerBtn" title="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <h1 class="dashboard-title">
+          <i class="fas fa-stethoscope"></i> Doctor Dashboard
+        </h1>
+        <span class="doctor-name">Dr. Dharshini</span>
+      </div>
+      <div class="nav-right">
+        <div class="analytics-summary">
+          <div class="stat-item">
+            <i class="fas fa-users"></i>
+            <span>Active: <strong id="activePatientsCount">0</strong></span>
+          </div>
+          <div class="stat-item">
+            <i class="fas fa-comments"></i>
+            <span>Messages: <strong id="totalMessagesCount">0</strong></span>
+          </div>
+        </div>
+        <button class="icon-btn" id="fullscreenBtn" title="Fullscreen">
+          <i class="fas fa-expand"></i>
+        </button>
+        <button class="icon-btn" id="themeToggle" title="Toggle Dark Mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="icon-btn" id="settingsBtn" title="Settings">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </nav>
+
+    <div class="dashboard-content" id="dashboardContent">
+      <!-- Left Panel: Patient List -->
+      <aside class="left-panel draggable-panel" id="leftPanel">
+        <div class="panel-header">
+          <h2><i class="fas fa-list"></i> Patients</h2>
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="patientSearch" placeholder="Search patients..." />
+          </div>
+        </div>
+        <div class="patients-list" id="patientsList">
+          <!-- Patient items will be dynamically added here -->
+        </div>
+        <button class="btn-add-patient" id="addPatientBtn">
+          <i class="fas fa-plus"></i> New Patient
+        </button>
+      </aside>
+
+      <!-- Center Panel: Chat Area -->
+      <main class="chat-panel draggable-panel" id="chatPanel">
+        <div class="chat-header" id="chatHeader">
+          <div class="chat-header-left">
+            <div class="patient-avatar-large" id="patientAvatar">
+              <span id="patientInitials">P</span>
+            </div>
+            <div class="patient-info-header">
+              <h3 id="patientNameHeader">Select a patient</h3>
+              <div class="patient-status" id="patientStatus">
+                <span class="status-dot offline"></span>
+                <span>Offline</span>
+              </div>
+            </div>
+          </div>
+          <div class="chat-header-right">
+            <button class="icon-btn" id="toggleRightPanelBtn" title="Toggle Patient Info" style="display: none;">
+              <i class="fas fa-info-circle"></i>
+            </button>
+            <button class="icon-btn" id="exportPdfBtn" title="Export Chat as PDF">
+              <i class="fas fa-file-pdf"></i>
+            </button>
+            <button class="icon-btn" id="clearChatBtn" title="Clear Chat">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="messages-container" id="messagesContainer">
+          <div class="messages" id="messages">
+            <div class="welcome-message">
+              <i class="fas fa-comments"></i>
+              <p>Select a patient from the left panel to start chatting</p>
+            </div>
+          </div>
+          <div class="typing-indicator" id="typingIndicator" style="display: none;">
+            <div class="typing-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span id="typingText">Patient is typing...</span>
+          </div>
+        </div>
+
+        <div class="chat-composer">
+          <button class="icon-btn voice-btn" id="voiceBtn" title="Voice Input">
+            <i class="fas fa-microphone"></i>
+          </button>
+          <input 
+            type="text" 
+            id="messageInput" 
+            placeholder="Type a message..." 
+            autocomplete="off"
+          />
+          <input type="file" id="fileInput" style="display: none;" multiple accept="image/*,application/pdf,.doc,.docx">
+          <button class="icon-btn" id="attachBtn" title="Attach File">
+            <i class="fas fa-paperclip"></i>
+          </button>
+          <button class="btn-send" id="sendBtn">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </main>
+
+      <!-- Right Panel: Patient Info & Analytics -->
+      <aside class="right-panel draggable-panel" id="rightPanel">
+        <div class="panel-header">
+          <h2><i class="fas fa-info-circle"></i> Patient Info</h2>
+        </div>
+        <div class="patient-details" id="patientDetails">
+          <div class="empty-state">
+            <i class="fas fa-user-injured"></i>
+            <p>Select a patient to view details</p>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h3><i class="fas fa-chart-bar"></i> Analytics</h3>
+          <div class="analytics-content">
+            <div class="chart-container">
+              <canvas id="symptomsChart"></canvas>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <i class="fas fa-clock"></i>
+                <div>
+                  <span class="stat-label">Avg. Response</span>
+                  <span class="stat-value" id="avgResponseTime">--</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <i class="fas fa-message"></i>
+                <div>
+                  <span class="stat-label">Messages Today</span>
+                  <span class="stat-value" id="messagesToday">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settingsModal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-cog"></i> Settings</h2>
+        <button class="icon-btn modal-close" id="closeSettingsBtn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-section">
+          <h3>Appearance</h3>
+          <div class="setting-item">
+            <label>Theme</label>
+            <select id="themeSelect">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="auto">Auto (System)</option>
+            </select>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Notifications</h3>
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="soundNotifications" checked>
+              Sound Notifications
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="desktopNotifications" checked>
+              Desktop Notifications
+            </label>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Chat</h3>
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="autoScroll" checked>
+              Auto-scroll to bottom
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="showTimestamps" checked>
+              Show timestamps
+            </label>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Panel Layout</h3>
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="enableDragging" checked>
+              Enable draggable panels
+            </label>
+          </div>
+          <button class="btn-secondary" id="resetLayoutBtn">Reset Panel Layout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Sound (hidden audio element) -->
+  <audio id="notificationSound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZUQ8NT6Pc8LlkHAU0idPy1YA3CB1ruO3nn00QDE+n4/C2YxwGOJLX8sx5LAUkc8fw3ZBACxRetOnrqFUUCkaf4PK+bCEFMYfR89OCMwYebsDv45lRDw1Po9zwuWQcBTSJ0/LVgDcIHWu47eefTRAMT6fj8LZjHAY4ktfy" type="audio/wav">
+  </audio>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="/script.js"></script>
+</body>
+</html>

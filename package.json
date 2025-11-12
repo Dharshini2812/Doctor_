@@ -1,0 +1,38 @@
+{
+  "name": "doctor-patient-chat",
+  "version": "1.0.0",
+  "description": "Live chat between doctor and patient over sockets (Socket.IO + Express)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "socket.io",
+    "chat",
+    "doctor",
+    "patient"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
