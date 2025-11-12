@@ -215,59 +215,7 @@
   <!-- Toast Notifications -->
   <div class="toast-container" id="toastContainer"></div>
 
-  <!-- Settings Modal -->
-  <div class="modal-overlay" id="settingsModal" hidden>
-    <div class="modal-content">
-      <header class="modal-header">
-        <h2><i class="fas fa-cog"></i> Settings</h2>
-        <button class="icon-btn modal-close" id="closeSettingsBtn" title="Close Settings">
-          <i class="fas fa-times"></i>
-        </button>
-      </header>
-
-      <div class="modal-body">
-        <section class="settings-section">
-          <h3>Appearance</h3>
-          <div class="setting-item">
-            <label for="themeSelect">Theme</label>
-            <select id="themeSelect">
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-              <option value="auto">Auto (System)</option>
-            </select>
-          </div>
-        </section>
-
-        <section class="settings-section">
-          <h3>Notifications</h3>
-          <div class="setting-item">
-            <label><input type="checkbox" id="soundNotifications" checked /> Sound Notifications</label>
-          </div>
-          <div class="setting-item">
-            <label><input type="checkbox" id="desktopNotifications" checked /> Desktop Notifications</label>
-          </div>
-        </section>
-
-        <section class="settings-section">
-          <h3>Chat</h3>
-          <div class="setting-item">
-            <label><input type="checkbox" id="autoScroll" checked /> Auto-scroll to bottom</label>
-          </div>
-          <div class="setting-item">
-            <label><input type="checkbox" id="showTimestamps" checked /> Show timestamps</label>
-          </div>
-        </section>
-
-        <section class="settings-section">
-          <h3>Panel Layout</h3>
-          <div class="setting-item">
-            <label><input type="checkbox" id="enableDragging" checked /> Enable draggable panels</label>
-          </div>
-          <button class="btn-secondary" id="resetLayoutBtn">Reset Panel Layout</button>
-        </section>
-      </div>
-    </div>
-  </div>
+ 
 
   <!-- Notification Sound -->
   <audio id="notificationSound" preload="auto">
